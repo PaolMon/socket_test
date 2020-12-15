@@ -17,10 +17,11 @@ hasFrames,image = vid_cap.read()
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     
     s.connect((HOST, PORT))
+    k = image.tobytes()
+    print('size of the buffer to send: %s' % sys.getsizeof(k))
+    s.send(b'%g'.zfill(10) % sys.getsizeof(k))
 
     while hasFrames:
         k = image.tobytes()
-        print('size of the buffer to send: %s' % sys.getsizeof(k))
-        s.send(b'%g'.zfill(10) % sys.getsizeof(k))
         s.sendall(k)
         hasFrames,image = vid_cap.read()
