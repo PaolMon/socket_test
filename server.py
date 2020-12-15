@@ -21,17 +21,16 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             while True:
                 frame = b''
                 remaining_bytes = frame_size
-                while remaining_bytes:
+                print('WAITING FOR %g BYTES' % remaining_bytes)
+                while remaining_bytes > 0:
                     data = conn.recv(remaining_bytes)
                     if not data:
                         break
                     frame += data
                     remaining_bytes = frame_size - sys.getsizeof(frame)
+                    print('%g bytes remaining' % remaining_bytes)
 
                 print('size of the received buffer : %s' % sys.getsizeof(frame))
 
                 y = np.frombuffer(frame, dtype=np.uint8, count=-1)
                 y=np.reshape(y, (480, 640, 3))
-
-                cv2.imshow('image',y)
-                cv2.waitKey(0)
