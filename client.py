@@ -25,12 +25,13 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     
     s.connect((HOST, PORT))
     k = image.tobytes()
+    print('size of the buffer to encrypt: %s' % sys.getsizeof(k))
     k = cipher.encrypt(k)
     print('size of the buffer to send: %s' % sys.getsizeof(k))
     s.send("{}".format(sys.getsizeof(k)).zfill(10).encode())
 
     while hasFrames:
-        k = cipher.encrypt(k)
         k = image.tobytes()
+        k = cipher.encrypt(k)
         s.sendall(k)
         hasFrames,image = vid_cap.read()
